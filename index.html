@@ -11,15 +11,19 @@
 <body>
     <div id="main-elements">
         <div id="selection-bar">
-            <div id="change-color-cointainer">
-                <input type="color" id="head" name="head" 
-                value="">
-                <label for="head">Choose color</label>
+            <div class="container-for-shorter">
+                <label class="shorter-text" for="color-pick">Choose color</label>
+                <input class="selection-shorter" type="color" name="color-pick" id="color-pick">
             </div>
-            <button id="rainbow-button"></button>
-            <button id="darkening-button"></button>
-            <button id="bucket-button"></button>
-            <button id="clear-button"></button>
+            <button class="selection-button" id="rainbow">Rainbow Mode</button>
+            <button class="selection-button" id="darkening">Darkening Mode</button>
+            <div class="container-for-shorter">
+                <span class="shorter-text">Fill</span>
+                <button class="selection-shorter" id="bucket">
+                    <img id="bucket-image" src="./photos/bucket.png" alt="coloring bucket">
+                </button>
+            </div>
+            <button class="selection-button" id="clear">Clear</button>
         </div>
         <div id="grid-container"></div>
     </div>
