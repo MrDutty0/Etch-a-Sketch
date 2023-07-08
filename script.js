@@ -1,3 +1,9 @@
+createGrid(38);
+
+listenForGrid();
+
+let chosenColor = "rgb(0, 0, 0)";
+
 function createGrid(size) {
     const gridContainer = document.getElementById("grid-container");
 
@@ -6,6 +12,7 @@ function createGrid(size) {
 
     const gridElement = document.createElement("div");
     gridElement.classList.add("grid-element");
+    gridElement.classList.add("grid-borders");
 
     // Add elements to gridRow
     for (let i = 0; i < size; i++) {
@@ -20,4 +27,28 @@ function createGrid(size) {
     }
 }
 
-createGrid(8);
+function listenForGrid() {
+    const gridElements = document.getElementsByClassName("grid-element");
+
+    Array.from(gridElements).forEach(element => {
+        element.addEventListener("mouseenter", paint);
+    });
+}
+
+function paint(e) {
+    const currentColor = e.target.style.backgroundColor;
+    e.target.style.backgroundColor = getColor(currentColor);
+}
+
+function getColor(currentColor) {
+    if(!currentColor) {        
+        return chosenColor
+    }
+
+    splitColor(chosenColor);
+}
+
+function splitColor(colorText) {
+    const insideParentheses = colorText.slice(4, colorText.length - 1);
+    return insideParentheses.split(",");
+}

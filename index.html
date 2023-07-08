@@ -10,22 +10,39 @@
 </head>
 <body>
     <div id="main-elements">
-        <div id="selection-bar">
-            <div class="container-for-shorter">
-                <label class="shorter-text" for="color-pick">Choose color</label>
-                <input class="selection-shorter" type="color" name="color-pick" id="color-pick">
+        <div class="grid-and-selection">
+            <div id="selection-bar">
+                <div class="container-for-shorter">
+                    <label class="shorter-text" for="color-pick">Choose color</label>
+                    <input class="selection-shorter" type="color" name="color-pick" id="color-pick">
+                </div>
+                <button class="selection-button" id="rainbow">Rainbow Mode</button>
+                <button class="selection-button" id="darkening">Darkening Mode</button>
+                <div class="container-for-shorter">
+                    <span class="shorter-text">Fill</span>
+                    <button class="selection-shorter" id="bucket">
+                        <img id="bucket-image" src="./photos/bucket.png" alt="coloring bucket">
+                    </button>
+                </div>
+                <button class="selection-button" id="clear">Clear</button>
             </div>
-            <button class="selection-button" id="rainbow">Rainbow Mode</button>
-            <button class="selection-button" id="darkening">Darkening Mode</button>
-            <div class="container-for-shorter">
-                <span class="shorter-text">Fill</span>
-                <button class="selection-shorter" id="bucket">
-                    <img id="bucket-image" src="./photos/bucket.png" alt="coloring bucket">
-                </button>
-            </div>
-            <button class="selection-button" id="clear">Clear</button>
+
+            <div id="grid-container"></div>
         </div>
-        <div id="grid-container"></div>
+        
+        <div class="size">
+            <div class="centering-size">
+                <div class="grid-size-container">
+                    <label for="grid-size">Select grid size:</label>
+                    <input type="range" id="grid-size" min="10" max="100">
+                    <div class="domain-text">
+                        <span>10</span>
+                        <span>100</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    
 </body>
 </html>
