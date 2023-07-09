@@ -1,6 +1,33 @@
 createGrid(38);
-
 listenForGrid();
+listenForButtons();
+
+function listenForButtons() {
+    const buttons = document.getElementsByTagName("button");
+
+    Array.from(buttons).forEach(button => {
+        button.addEventListener("click", e => {
+            makeButtonClickOnce(button); 
+        });
+    });
+}
+
+function makeButtonClickOnce(currentButton) {
+    if(currentButton.id === "clear") {
+        return
+    }
+
+    currentButton.classList.toggle("clicked");
+
+    const clickedButtons = document.getElementsByClassName("clicked");
+    if(clickedButtons.length) {
+        Array.from(clickedButtons).forEach(clickedButton => {
+            if(clickedButton != currentButton) {
+                clickedButton.classList.remove("clicked");
+            }
+        });
+    }
+}
 
 let chosenColor = "rgb(0, 0, 0)";
 
