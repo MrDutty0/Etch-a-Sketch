@@ -1,6 +1,36 @@
-createGrid(38);
-listenForGrid();
+updateGrid();
 listenForButtons();
+listenForInput();
+
+function updateGrid() {
+    const gridSize = document.getElementById("grid-size").value;
+
+    updateGridSizeText(gridSize);
+    createGrid(gridSize);
+    listenForGrid();
+}
+
+function listenForInput() {
+    const input = document.getElementById("grid-size");
+
+    input.addEventListener("input", e => {
+        removeGrid();
+        updateGrid();
+    });
+}
+
+function updateGridSizeText(gridSize) {
+    const gridSizeText = document.getElementById("current-size");
+    gridSizeText.textContent = `${gridSize} x ${gridSize}`;
+}
+
+function removeGrid() {
+    const gridContainer = document.getElementById("grid-container");
+
+    while(gridContainer.firstChild) {
+        gridContainer.removeChild(gridContainer.firstChild);
+    }
+}
 
 function listenForButtons() {
     const buttons = document.getElementsByTagName("button");

@@ -44,9 +44,6 @@ body {
 
 .grid-element {
     flex: 1;
-}
-
-grid-borders {
     border: 1px solid rgb(53, 52, 52);
 }
 
