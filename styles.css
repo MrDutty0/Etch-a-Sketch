@@ -143,7 +143,7 @@ grid-borders {
 
 .grid-size-container {
     width: 250px;
-    padding-top: 7px;
+    padding: 5px 0;
 
 
     display: flex;
@@ -156,4 +156,17 @@ grid-borders {
     justify-content: space-between;
 
     font-size: 18px;
+}
+
+button {
+    transition: 0.25s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.clicked {
+    border-color: #D15D8A;
+    background-color: #DC85A7;
 }
