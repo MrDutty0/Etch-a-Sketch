@@ -88,14 +88,24 @@ function listenForGrid() {
     Array.from(gridElements).forEach(element => {
         element.addEventListener("mouseenter", event => {
             if(event.buttons === 1) {
-                event.target.style.backgroundColor = "green";
+                event.target.style.backgroundColor = getColorToPaint();
             }
             event.preventDefault();
         });
         element.addEventListener("mousedown", event => {
             if(event.button != 0) return; //if pressed button isn't the first one
-            event.target.style.backgroundColor = "green";
+            event.target.style.backgroundColor = getColorToPaint();
             event.preventDefault();
         });
     }); 
+}
+
+function getClickedButtonType() {
+    const clickedButtonType = document.getElementsByClassName("clicked").id;
+    if(clickedButtonType) return clickedButtonType;
+    return null;
+}
+
+function getColorToPaint() {
+    
 }
