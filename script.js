@@ -94,18 +94,44 @@ function listenForGrid() {
         });
         element.addEventListener("mousedown", event => {
             if(event.button != 0) return; //if pressed button isn't the first one
-            event.target.style.backgroundColor = getColorToPaint();
+
+            if(isPaintingEnabled()) {
+                event.target.style.backgroundColor = getColorToPaint();
+            } 
+            // if fill bucket is enabled
+            else {
+                //do later                
+            }
             event.preventDefault();
         });
     }); 
 }
 
+function isPaintingEnabled() {
+    // console.log(getClickedButtonType());
+    return getClickedButtonType() !== "fill";
+}
+
 function getClickedButtonType() {
-    const clickedButtonType = document.getElementsByClassName("clicked").id;
-    if(clickedButtonType) return clickedButtonType;
-    return null;
+    const clickedButtons = document.getElementsByClassName("clicked");
+    let clickedButtonType = null;
+
+    if(clickedButtons.length) {
+        clickedButtonType = clickedButtons[0].id;
+    }
+
+    return clickedButtonType;
+}
+
+function getInputColor() {
+    const input = document.getElementById("color-pick");
+    return input.value;
 }
 
 function getColorToPaint() {
-    
+    const colorMode = getClickedButtonType();
+
+    if(!colorMode) {
+        return getInputColor();
+    }
 }
