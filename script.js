@@ -13,7 +13,7 @@ function updateGrid() {
 function listenForInput() {
     const input = document.getElementById("grid-size");
 
-    input.addEventListener("input", e => {
+    input.addEventListener("input", event => {
         removeGrid();
         updateGrid();
     });
@@ -36,7 +36,7 @@ function listenForButtons() {
     const buttons = document.getElementsByTagName("button");
 
     Array.from(buttons).forEach(button => {
-        button.addEventListener("click", e => {
+        button.addEventListener("click", event => {
             makeButtonClickOnce(button); 
         });
     });
@@ -58,8 +58,6 @@ function makeButtonClickOnce(currentButton) {
         });
     }
 }
-
-let chosenColor = "rgb(0, 0, 0)";
 
 function createGrid(size) {
     const gridContainer = document.getElementById("grid-container");
@@ -86,26 +84,18 @@ function createGrid(size) {
 
 function listenForGrid() {
     const gridElements = document.getElementsByClassName("grid-element");
-
+    
     Array.from(gridElements).forEach(element => {
-        element.addEventListener("mouseenter", paint);
-    });
-}
-
-function paint(e) {
-    const currentColor = e.target.style.backgroundColor;
-    e.target.style.backgroundColor = getColor(currentColor);
-}
-
-function getColor(currentColor) {
-    if(!currentColor) {        
-        return chosenColor
-    }
-
-    splitColor(chosenColor);
-}
-
-function splitColor(colorText) {
-    const insideParentheses = colorText.slice(4, colorText.length - 1);
-    return insideParentheses.split(",");
+        element.addEventListener("mouseenter", event => {
+            if(event.buttons === 1) {
+                event.target.style.backgroundColor = "green";
+            }
+            event.preventDefault();
+        });
+        element.addEventListener("mousedown", event => {
+            if(event.button != 0) return; //if pressed button isn't the first one
+            event.target.style.backgroundColor = "green";
+            event.preventDefault();
+        });
+    }); 
 }
