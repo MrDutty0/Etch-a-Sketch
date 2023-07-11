@@ -2,6 +2,8 @@ updateGrid();
 listenForButtons();
 listenForInput();
 
+let lastColoredNode = null;
+
 function updateGrid() {
     const gridSize = document.getElementById("grid-size").value;
 
@@ -88,7 +90,9 @@ function listenForGrid() {
     Array.from(gridElements).forEach(element => {
         element.addEventListener("mouseenter", event => {
             if(event.buttons === 1) {
-                event.target.style.backgroundColor = getColorToPaint();
+                event.target.style.backgroundColor = getColorToPaint(event);
+
+                lastColoredNode = element;
             }
             event.preventDefault();
         });
@@ -96,7 +100,9 @@ function listenForGrid() {
             if(event.button != 0) return; //if pressed button isn't the first one
 
             if(isPaintingEnabled()) {
-                event.target.style.backgroundColor = getColorToPaint();
+                event.target.style.backgroundColor = getColorToPaint(event);
+                
+                lastColoredNode = element;
             } 
             // if fill bucket is enabled
             else {
@@ -108,7 +114,6 @@ function listenForGrid() {
 }
 
 function isPaintingEnabled() {
-    // console.log(getClickedButtonType());
     return getClickedButtonType() !== "fill";
 }
 
@@ -128,10 +133,65 @@ function getInputColor() {
     return input.value;
 }
 
-function getColorToPaint() {
+function getRainbowColor(event) {
+    const colors = [
+        "rgb(255, 50, 50)",    // red
+        "rgb(255, 165, 0)",   // orange
+        "rgb(255, 255, 0)",   // yellow
+        "rgb(0, 255, 0)",     // green
+        "rgb(0, 0, 255)",     // blue
+        "rgb(75, 0, 130)",    // indigo
+        "rgb(147, 0, 255)"    // violet
+      ];
+
+    const colorIndex = {
+        "red" : 0,
+        "orange" : 1,
+        "yellow" : 2,
+        "green" : 3,
+        "blue" : 4,
+        "indigo" : 5,
+        "violet" : 6
+    };
+    let nextColorIndex = 0;
+    if(lastColoredNode) { //if grid is colored at all
+        const lastColorOrigin = lastColoredNode.getAttribute("data-color-origin");
+        if(lastColorOrigin) {// if last colored node has data-color-origin attribute
+            nextColorIndex = (colorIndex[lastColorOrigin] + 1) % 7;   
+        }
+    }
+
+    event.target.setAttribute("data-color-origin", getKeyByValue(colorIndex, nextColorIndex)) //set element's data-color-origin attribute
+    const newColor = randomizeColor(colors[nextColorIndex]);
+
+    return newColor;
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+function randomizeColor(rgbColor) {
+    const newColorsValues = [];
+    for(let rgbValue of rgbColor.slice(4, -1).split(","))
+    {
+        const randNum = Math.floor(Math.random() * 25);
+        
+        newColorsValues.push(Math.abs(+rgbValue - randNum));
+    }
+    const newColor = `rgb(${newColorsValues[0]}, ${newColorsValues[1]}, ${newColorsValues[2]})`;
+    return newColor;
+}
+
+function getColorToPaint(event) {
     const colorMode = getClickedButtonType();
 
-    if(!colorMode) {
-        return getInputColor();
+    switch (colorMode) {
+        case "rainbow":
+            return getRainbowColor(event);
+
+
+        default:
+            return getInputColor()
     }
 }
