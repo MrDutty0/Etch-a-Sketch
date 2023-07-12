@@ -89,32 +89,18 @@ function listenForGrid() {
     
     Array.from(gridElements).forEach(element => {
         element.addEventListener("mouseenter", event => {
-            if(event.buttons === 1) {
-                event.target.style.backgroundColor = getColorToPaint(event);
-
-                lastColoredNode = element;
-            }
+            if(event.buttons !== 1) return; //if the first mouse button is not being held
+            
+            makeColorChangesBySelectedMode(event);
             event.preventDefault();
         });
         element.addEventListener("mousedown", event => {
             if(event.button != 0) return; //if pressed button isn't the first one
 
-            if(isPaintingEnabled()) {
-                event.target.style.backgroundColor = getColorToPaint(event);
-                
-                lastColoredNode = element;
-            } 
-            // if fill bucket is enabled
-            else {
-                //do later                
-            }
+            makeColorChangesBySelectedMode(event);
             event.preventDefault();
         });
     }); 
-}
-
-function isPaintingEnabled() {
-    return getClickedButtonType() !== "fill";
 }
 
 function getClickedButtonType() {
@@ -183,15 +169,48 @@ function randomizeColor(rgbColor) {
     return newColor;
 }
 
-function getColorToPaint(event) {
+function getBrightness(event) {
+    const fullBrightnessText = event.target.style.filter;
+    if(!fullBrightnessText) return null;
+    const brightnessValue = fullBrightnessText.slice(fullBrightnessText.indexOf("(") + 1, -2);
+    return brightnessValue;
+}
+
+function makeDarkened(event) {
+    const currentBrightness = getBrightness(event);
+    if(currentBrightness) {
+        event.target.style.filter = `brightness(${Math.max(20, currentBrightness - 8)}%)`;
+    } else {
+        event.target.style.filter = `brightness(${100}%)`;
+    }
+}
+
+function makeColorChangesBySelectedMode(event) {
     const colorMode = getClickedButtonType();
 
     switch (colorMode) {
         case "rainbow":
-            return getRainbowColor(event);
+            changeBackgroundColor(event, getRainbowColor(event)); 
+            lastColoredNode = event.target;
+            break;
 
+        case "fill":
+            if(event.type === "mousedown") {
+                //...
+                break;
+            }
+            break;
+
+        case "darkening":
+            makeDarkened(event);
+            lastColoredNode = event.target;
+            //no need to add break because default action changes the background 
 
         default:
-            return getInputColor()
+            changeBackgroundColor(event, getInputColor());
     }
+}
+
+function changeBackgroundColor(event, color) {
+    event.target.style.backgroundColor = color;
 }
