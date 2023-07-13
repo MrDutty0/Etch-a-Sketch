@@ -69,7 +69,6 @@ function createGrid(size) {
 
     const gridElement = document.createElement("div");
     gridElement.classList.add("grid-element");
-    gridElement.classList.add("grid-borders");
 
     // Add elements to gridRow
     for (let i = 0; i < size; i++) {
@@ -115,8 +114,16 @@ function getClickedButtonType() {
 }
 
 function getInputColor() {
-    const input = document.getElementById("color-pick");
-    return input.value;
+    const inputColorInHex = document.getElementById("color-pick").value;
+    return hexToRgb(inputColorInHex);
+}
+
+function hexToRgb(inHex) {
+    const r = parseInt(inHex.slice(1,3), 16);
+    const g = parseInt(inHex.slice(3,5), 16);
+    const b = parseInt(inHex.slice(5), 16);
+
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 function getRainbowColor(event) {
@@ -196,8 +203,8 @@ function makeColorChangesBySelectedMode(event) {
 
         case "fill":
             if(event.type === "mousedown") {
-                //...
-                break;
+                const currColor = event.target.style.backgroundColor;
+                makeFill(getElementRowIndex(event), event.target, getInputColor(), currColor);
             }
             break;
 
@@ -209,6 +216,54 @@ function makeColorChangesBySelectedMode(event) {
         default:
             changeBackgroundColor(event, getInputColor());
     }
+}
+
+function makeFill(currIndex, element, colorToPaintWith, colorToPaintOn, defaultColor = "rgb(253, 248, 242)") {
+    if(!element) return;
+
+    const currColor = element.style.backgroundColor;
+
+    if(currColor === defaultColor || (currColor === colorToPaintOn && (colorToPaintWith !== colorToPaintOn))) {
+        element.style.backgroundColor = colorToPaintWith;
+    } else return;
+
+    //Go horizontally
+    const allSiblings = Array.from(element.parentElement.children); 
+    if(inRange(currIndex - 1)) {
+        const leftSibling = allSiblings[currIndex - 1];
+        makeFill(currIndex - 1, leftSibling, colorToPaintWith, colorToPaintOn);
+    }
+    if(inRange(currIndex + 1)) {
+        const rightSibling = allSiblings[currIndex + 1];
+        makeFill(currIndex + 1, rightSibling, colorToPaintWith, colorToPaintOn);
+    }
+
+    //go vertically
+    const aboveParentSibling = element.parentElement.previousElementSibling;
+    const belowParentSibling = element.parentElement.nextElementSibling;
+
+    if(aboveParentSibling) { // if parent element above exists
+        const aboveElement = Array.from(aboveParentSibling.children)[currIndex];
+        makeFill(currIndex, aboveElement, colorToPaintWith, colorToPaintOn);
+    }
+
+    if(belowParentSibling) { // if parent element above exists
+        const belowElement = Array.from(belowParentSibling.children)[currIndex];
+        makeFill(currIndex, belowElement, colorToPaintWith, colorToPaintOn);
+    }
+}
+
+function inRange(index) {
+    const gridRange = document.getElementById("grid-size").value;
+    return index >= 0 && index < gridRange;
+}
+
+function getElementRowIndex(event) {
+    const elementToFind = event.target;
+    const allSiblings = Array.from(elementToFind.parentElement.children); 
+
+    const elementIndex = allSiblings.indexOf(elementToFind);
+    return elementIndex;
 }
 
 function changeBackgroundColor(event, color) {
