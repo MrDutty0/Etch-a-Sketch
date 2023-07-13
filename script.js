@@ -39,9 +39,25 @@ function listenForButtons() {
 
     Array.from(buttons).forEach(button => {
         button.addEventListener("click", event => {
-            makeButtonClickOnce(button); 
+            makeButtonClickOnce(button);
+            if(button.id === "clear") {
+                clearGrid();
+            }
         });
     });
+}
+
+function clearGrid() {
+    const gridContainer = document.getElementById("grid-container");
+
+    for(const row of Array.from(gridContainer.children)) { //loop through rows
+        for(const gridElement of Array.from(row.children)) { //loop through elements of row
+            gridElement.removeAttribute("data-color-origin");
+            //set to the default values:
+            gridElement.style.filter = ""; 
+            gridElement.style.backgroundColor = "";
+        }
+    }
 }
 
 function makeButtonClickOnce(currentButton) {
